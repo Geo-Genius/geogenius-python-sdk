@@ -1,0 +1,136 @@
+{% extends "circle.html" %}
+
+{% block circle %}
+
+    // extract JSON property used for data-driven styling to add to popup
+    {% if enableDataJoin %}
+
+        {% if joinData %}
+
+            let joinData = {{ joinData }};
+            var popUpKeys = {};
+
+            // Create filter for layers from join data
+            let layerFilter = ['in', "{{ vectorJoinDataProperty }}"]
+            
+            joinData.forEach(function(row, index) {
+                popUpKeys[row["{{ dataJoinProperty }}"]] = row["{{ colorProperty }}"];
+                layerFilter.push(row["{{ dataJoinProperty }}"]);
+            });
+
+        {% endif %}
+    
+    {% endif %}
+
+    // Add vector data source
+    map.addSource("vector-data", {
+        type: "vector",
+        url: "{{ vectorUrl }}",
+    });
+    
+    // Add layer from the vector tile source with data-driven style
+    map.addLayer({
+        "id": "circle",
+        "type": "circle",
+        "source": "vector-data",
+        "source-layer": "{{ vectorLayer }}",
+        "maxzoom": {{ maxzoom }},
+        "minzoom": {{ minzoom }},
+        "paint": {
+            {% if enableDataJoin %}
+                "circle-color": ["case",
+                    ["boolean", ["feature-state", "hover"], false], 
+                    "{{ highlightColor }}", 
+                    generatePropertyExpression('match', "{{ vectorJoinDataProperty }}", {{ vectorColorStops }}, "{{ defaultColor }}")], 
+            {% else %}
+                {% if colorProperty %}
+                    "circle-color": ["case",
+                        ["boolean", ["feature-state", "hover"], false], 
+                        "{{ highlightColor }}",
+                        generatePropertyExpression("{{ colorType }}", "{{ colorProperty }}", {{ colorStops }}, "{{ defaultColor }}")],
+                    {% else %}
+                    "circle-color": ["case",
+                        ["boolean", ["feature-state", "hover"], false], 
+                        "{{ highlightColor }}",
+                        "{{ defaultColor }}"],
+                {% endif %}
+            {% endif %}
+            "circle-radius" : generatePropertyExpression('interpolate', 'zoom', [[0,{{ radius }}], [22,10 * {{ radius }}]]),
+            "circle-stroke-color": ["case",
+                ["boolean", ["feature-state", "hover"], false], 
+                "{{ highlightColor }}",
+                "{{ strokeColor }}"],
+            "circle-stroke-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ strokeWidth }}], [18,5* {{ strokeWidth }}]]),
+            "circle-opacity" : {{ opacity }},
+            "circle-stroke-opacity" : {{ opacity }}
+        }
+        {% if enableDataJoin %}
+        , filter: layerFilter
+        {% endif %}
+    }, "{{ belowLayer }}" );
+    
+    // Add label layer
+    map.addLayer({
+        "id": "circle-label",
+        "source": "vector-data",
+        "source-layer": "{{ vectorLayer }}",
+        "type": "symbol",
+        "maxzoom": {{ maxzoom }},
+        "minzoom": {{ minzoom }},
+        "layout": {
+            {% if labelProperty %}
+                "text-field": "{{ labelProperty }}",
+            {% endif %}
+            "text-size" : generateInterpolateExpression('zoom', [[0, {{ labelSize }}],[22, 3* {{ labelSize }}]] ),
+            "text-offset": [0,-1]
+        },
+        "paint": {
+            "text-halo-color": "{{ labelHaloColor }}",
+            "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ labelHaloWidth }}], [18,5* {{ labelHaloWidth }}]]),
+            "text-color": ["case",
+                ["boolean", ["feature-state", "hover"], false], 
+                "{{ highlightColor }}",
+                "{{ labelColor }}"]
+        }
+        {% if enableDataJoin %}
+        , filter: layerFilter
+        {% endif %}
+    }, "{{belowLayer}}" );
+
+{% endblock circle %}
+
+{% block circle_popup %}
+
+var hoveredStateId = 0;
+
+    map.on(popupAction, function(e) {
+        var features = map.queryRenderedFeatures(e.point, {layers: ['circle', 'circle-label'] });
+
+        if (features.length > 0) {
+            map.getCanvas().style.cursor = 'pointer';
+            var f = features[0];
+            newHoveredStateId = f.id;
+            if (newHoveredStateId != hoveredStateId) {
+                map.removeFeatureState({source: 'vector-data', sourceLayer: "{{ vectorLayer }}", id: hoveredStateId});
+                hoveredStateId = newHoveredStateId;
+            }
+            map.setFeatureState({source: 'vector-data', sourceLayer: "{{ vectorLayer }}", id: hoveredStateId}, { hover: true});
+            let popup_html = '<div>';
+
+            for (key in f.properties) {
+                popup_html += '<li><b> ' + key + '</b>: ' + f.properties[key] + ' </li>'
+            }
+
+            popup_html += '</div>'
+            popup.setLngLat(e.lngLat)
+                .setHTML(popup_html)
+                .addTo(map);
+        }
+        else {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+            map.removeFeatureState({source: 'vector-data', sourceLayer: "{{ vectorLayer }}", id: hoveredStateId});
+        }
+    });
+
+{% endblock circle_popup %}

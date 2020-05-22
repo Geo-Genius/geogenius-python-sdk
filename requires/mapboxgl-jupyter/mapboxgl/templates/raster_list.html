@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block legend %}{% endblock legend %}
+
+{% block map %}
+
+    map.on('style.load', function() {
+        {% for tiles in tiles_list %}
+        map.addLayer({
+            "id": "raster-tiles" + {{ loop.index0 }},
+            "type": "raster",
+            "source": {
+                "type": "raster",
+                "tiles": [
+                     "{{ tiles.tiles_url }}"
+                ],
+                "tileSize": {{ tiles.tiles_size }},
+                "minzoom": {{ tiles.tiles_minzoom }},
+                "maxzoom": {{ tiles.tiles_maxzoom }},
+                "bounds": {{ tiles.tiles_bounds }}
+            }
+        });
+        {% endfor %}
+    });
+
+{% endblock map %}

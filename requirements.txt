@@ -1,0 +1,41 @@
+# only for mapboxgl
+notebook<=5.7.5
+jupyterlab<=0.35.3
+jupyter==1.0.0
+pandas==0.25.0
+mock==3.0.5
+Jinja2==2.10.1
+geojson==2.4.1
+chroma-py==0.1.0.dev1
+colour==0.1.5
+ipython==7.7.0
+
+# only for conda
+gdal==2.4.1
+rasterio==1.0.24
+
+# only for pip
+python_dateutil==2.8.0
+scikit_image==0.15.0
+sentinelhub==2.6.0
+Shapely==1.6.4.post2
+eo-learn-io==0.6.0
+eo-learn-core==0.6.0
+eo-learn-visualization==0.6.0
+rio-cogeo==1.1.0
+rio-tiler
+
+# common
+pyproj==1.9.6
+affine==2.2.2
+setuptools==41.0.1
+cachetools==3.1.1
+numpy==1.16
+toolz==0.10.0
+dask==1.1.1
+matplotlib==3.1.0
+requests==2.22.0
+pytest==5.0.1
+pytest-runner==5.1
+mercantile==1.1.1
+pycurl==7.43.0.3

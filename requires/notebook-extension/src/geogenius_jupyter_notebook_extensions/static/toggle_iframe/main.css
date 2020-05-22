@@ -1,0 +1,155 @@
+/*
+
+originally extracted from https://gist.github.com/magican/5574556
+
+Most colors defined here are overridden by javascript which adds css based on
+values in the server config file notebook.json, which can be edited directly,
+or colors can be selected in the nbextensions_configurator
+*/
+
+#navigate_menu li > span:hover {
+    cursor: pointer;
+    background-color: #46cff1
+}
+
+
+/* Move menus and tooolbar to the left, following @Kevin-McIsaac suggestion
+This is now done in javascript, if the relevant option is selected
+div#menubar-container, div#header-container {
+width: auto;
+padding-left: 20px;
+}*/
+
+#navigate_menu {
+    list-style-type: none;
+    max-width: 800px;
+    min-width: 100px;
+    width: 250px;
+    overflow: auto;
+}
+
+
+#navigate_menu a {
+    list-style-type: none;
+    color: #333333; /* default - alterable via nbextension-configurator */
+    text-decoration: none;
+}
+
+#navigate_menu li {
+    padding-left: 0px;
+    clear: both;
+    list-style-type: none;
+}
+
+#navigate_menu ul {
+    padding-left: 0px;
+}
+
+.content {
+    padding: 0px;
+    overflow-y: auto;
+    font-weight: normal;
+    color: #333333; /* default - alterable via nbextension-configurator */
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.text_cell .content {
+    margin-top: 1em;
+}
+
+#toc-wrapper {
+    z-index: 90;
+    position: fixed !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 10px;
+    border-style: solid;
+    border-width: thin;
+    background-color: #fff; /* default - alterable via nbextension-configurator */
+}
+
+#toc-wrapper .content {
+    flex-grow: 1;
+}
+
+.float-wrapper {
+    border-color: rgba(0, 0, 0, 0.38);
+    border-radius: 5px;
+    opacity: .8;
+}
+
+.sidebar-wrapper {
+    top: 0;
+    bottom: 0;
+    width: 212px;
+    border-color: #eeeeee; /* default - alterable via nbextension-configurator */
+}
+
+.sidebar-wrapper .ui-resizable-se {
+    display: none;
+}
+
+.sidebar-wrapper .ui-resizable-e {
+    position: absolute;
+    top: calc(50% - 8px);
+}
+
+#toc-wrapper.closed {
+    min-width: 100px;
+    width: auto;
+    transition: width;
+}
+
+#toc-wrapper .header {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sidebar-wrapper .hide-btn {
+    display: none;
+}
+
+#toc-wrapper .hide-btn:before {
+    content: "\f147";
+}
+
+#toc-wrapper.closed .hide-btn:before {
+    content: "\f196";
+}
+
+#panel-header .fa {
+    font-size: 14px;
+    text-decoration: none;
+}
+
+#panel-header .fa-right {
+    float: right;
+}
+
+#panel-header .fa:hover {
+    cursor: pointer !important;
+    background-color: #5fa6e5
+}
+
+#panel-header, .modal-header {
+    cursor: move;
+}
+
+/*iframe style*/
+#side_data_iframe {
+    z-index:99;
+    width: 100%;
+    height: 100%;
+}
+
+#iframe_mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,2 @@
+recursive-include geogeniustools *
+include requirements.txt

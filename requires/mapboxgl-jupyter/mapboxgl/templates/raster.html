@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block legend %}{% endblock legend %}
+
+{% block map %}
+
+    map.on('style.load', function() {
+        let params = {
+            "type": "raster",
+            "tiles": [
+                 "{{ tiles_url }}"
+            ],
+            "tileSize": {{ tiles_size }},
+            "minzoom": {{ tiles_minzoom }},
+            "maxzoom": {{ tiles_maxzoom }}
+        }
+        if ({{ tiles_bounds }} !== undefined) params.bounds = {{ tiles_bounds }};
+
+        map.addSource("raster-tiles", params);
+
+        map.addLayer({
+            "id": "raster-tiles",
+            "type": "raster",
+            "source": "raster-tiles"
+        }, "{{belowLayer}}" );
+
+    });
+
+{% endblock map %}

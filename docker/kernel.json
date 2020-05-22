@@ -1,0 +1,14 @@
+{
+  "display_name": "Python3",
+  "language": "python",
+  "argv": [
+    "/home/ma-user/anaconda3/bin/python",
+    "-m",
+    "ipykernel",
+    "-f",
+    "{connection_file}"
+  ],
+  "env":{
+    "PATH": "/home/ma-user/anaconda3/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  }
+}

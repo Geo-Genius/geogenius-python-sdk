@@ -1,0 +1,58 @@
+{% extends "main.html" %}
+
+{% block javascript %}
+
+    mapboxgl.accessToken = '{{ accessToken }}';
+
+    var transformRequest = function(url, resourceType) {
+        const isMapboxRequest = url.slice(8, 22) === 'api.mapbox.com' ||
+          url.slice(10, 26) === 'tiles.mapbox.com';
+      
+        return {
+          url: isMapboxRequest ? url.replace('?', '?pluginName=PythonMapboxgl&') : url
+        }
+    };
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        attributionControl: false,
+        style: {{ style }},
+        center: {{ center }},
+        zoom: {{ zoom }},
+        pitch: {{ pitch }},
+        bearing: {{ bearing }},
+        scrollZoom: {{ scrollZoomOn|safe }},
+        touchZoom: {{ touchZoomOn|safe }},
+        doubleClickZoom: {{ doubleClickZoomOn|safe }},
+        boxZoom: {{ boxZoomOn|safe }},
+        preserveDrawingBuffer: {{ preserveDrawingBuffer|safe }},
+        transformRequest: transformRequest
+    });
+
+    {% block attribution %}
+    
+        map.addControl(new mapboxgl.AttributionControl({ compact: true }));
+
+    {% endblock attribution %}
+
+    {% block navigation %}
+
+        map.addControl(new mapboxgl.NavigationControl());
+
+    {% endblock navigation %}
+
+    {% block legend %}{% endblock legend %}
+
+    {% block scale %}
+        
+        {% if showScale %}
+        
+            map.addControl(new mapboxgl.ScaleControl({ unit: '{{ scaleUnits }}' }), '{{ scalePosition }}');
+        
+        {% endif %}
+
+    {% endblock scale %}
+
+    {% block map %}{% endblock map %}
+
+{% endblock %}

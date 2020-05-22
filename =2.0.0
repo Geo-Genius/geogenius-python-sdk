@@ -1,0 +1,5 @@
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple/
+Collecting cachetools
+  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/2f/a6/30b0a0bef12283e83e58c1d6e7b5aabc7acfc4110df81a4471655d33e704/cachetools-3.1.1-py2.py3-none-any.whl
+Installing collected packages: cachetools
+Successfully installed cachetools-3.1.1

@@ -1,0 +1,15 @@
+README.rst
+setup.cfg
+setup.py
+mapboxgl/__init__.py
+mapboxgl/colors.py
+mapboxgl/errors.py
+mapboxgl/templates.py
+mapboxgl/utils.py
+mapboxgl/viz.py
+mapboxgl.egg-info/PKG-INFO
+mapboxgl.egg-info/SOURCES.txt
+mapboxgl.egg-info/dependency_links.txt
+mapboxgl.egg-info/not-zip-safe
+mapboxgl.egg-info/requires.txt
+mapboxgl.egg-info/top_level.txt

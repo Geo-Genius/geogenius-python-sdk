@@ -1,0 +1,15 @@
+notebook<=5.7.5
+jupyterlab<=0.35.3
+jupyter
+numpy==1.15.4
+matplotlib==3.1.0
+setuptools==41.0.1
+pytest==5.0.1
+pandas==0.25.0
+mock==3.0.5
+Jinja2==2.10.1
+geojson==2.4.1
+chroma-py==0.1.0.dev1
+colour==0.1.5
+requests==2.22.0
+ipython==7.7.0

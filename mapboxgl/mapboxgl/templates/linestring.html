@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block legend %}
+
+    {% if showLegend %}
+        {% if colorStops and colorProperty and widthProperty %}
+            {% if colorProperty != widthProperty %}
+                calcColorLegend({{ colorStops }}, "{{ colorProperty }} vs. {{ widthProperty }}");
+            {% else %}
+                calcColorLegend({{ colorStops }}, "{{ colorProperty }}");
+            {% endif %}
+        {% elif colorStops and colorProperty %}
+            calcColorLegend({{ colorStops }}, "{{ colorProperty }}");
+        {% endif %}
+    {% endif %}
+
+{% endblock legend %}
+
+{% block map %}
+
+    map.on('style.load', function() {
+        
+        {% block linestring %}
+
+        // Add geojson data source
+        map.addSource("data", {
+            "type": "geojson",
+            "data": {{ geojson_data }},
+            "buffer": 1,
+            "maxzoom": 14,
+            "generateId": true
+        });
+
+        // Add data layer
+        map.addLayer({
+            "id": "linestring",
+            "source": "data",
+            "type": "line",
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                {% if lineDashArray %}
+                    "line-dasharray": {{ lineDashArray }},
+                {% endif %}
+                {% if colorProperty %}
+                    "line-color": ["case",
+                        ["boolean", ["feature-state", "hover"], false], 
+                        "{{ highlightColor }}",
+                        generatePropertyExpression("{{ colorType }}", "{{ colorProperty }}", {{ colorStops }}, "{{ defaultColor }}")],
+                {% else %}
+                    "line-color": ["case",
+                        ["boolean", ["feature-state", "hover"], false], 
+                        "{{ highlightColor }}","{{ defaultColor }}"],
+                {% endif %}
+                {% if widthProperty %}
+                    "line-width": generatePropertyExpression("{{ widthType }}", "{{ widthProperty }}", {{ widthStops }}, {{ defaultWidth }}),
+                {% else %}
+                    "line-width": {{ defaultWidth }},
+                {% endif %}
+                "line-opacity": {{ opacity }}
+            }
+        }, "{{ belowLayer }}" );
+
+        // Add label layer
+        map.addLayer({
+            "id": "linestring-label",
+            "source": "data",
+            "type": "symbol",
+            "layout": {
+                {% if labelProperty %}
+                "text-field": "{{ labelProperty }}",
+                {% endif %}
+                "text-size" : generateInterpolateExpression('zoom', [[0, {{ labelSize }}],[22, 3* {{ labelSize }}]] ),
+                "text-offset": [0,-1]
+            },
+            "paint": {
+                "text-halo-color": "{{ labelHaloColor }}",
+                "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ labelHaloWidth }}], [18,5* {{ labelHaloWidth }}]]),
+                "text-color": ["case",
+                    ["boolean", ["feature-state", "hover"], false], 
+                    "{{ highlightColor }}",
+                    "{{ labelColor }}"]
+            }
+        }, "{{belowLayer}}" );
+
+        {% endblock linestring %}
+
+        // Popups
+        {% if popupOpensOnHover %}
+            var popupAction = 'mousemove',
+                popupSettings =  {
+                    closeButton: false,
+                    closeOnClick: false
+                };
+        {% else %}
+            var popupAction = 'click',
+                popupSettings =  {
+                    closeButton: true,
+                    closeOnClick: true
+                };
+        {% endif %}
+
+        // Create a popup
+        var popup = new mapboxgl.Popup(popupSettings);
+        
+        {% block linestring_popup %}
+
+        var hoveredStateId = 0;
+
+        map.on(popupAction, function(e) {
+            var features = map.queryRenderedFeatures(e.point, {layers: ['linestring', 'linestring-label'] });
+
+            if (features.length > 0) {
+                map.getCanvas().style.cursor = 'pointer';
+                var f = features[0];
+                newHoveredStateId = f.id;
+                if (newHoveredStateId != hoveredStateId) {
+                    map.removeFeatureState({source: 'data', id: hoveredStateId});
+                    hoveredStateId = newHoveredStateId;
+                }
+                map.setFeatureState({source: 'data', id: hoveredStateId}, { hover: true});
+                let popup_html = '<div>';
+
+                for (key in f.properties) {
+                    popup_html += '<li><b> ' + key + '</b>: ' + f.properties[key] + ' </li>'
+                }
+
+                popup_html += '</div>'
+                popup.setLngLat(e.lngLat)
+                    .setHTML(popup_html)
+                    .addTo(map);
+            }
+            else {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+                map.removeFeatureState({source: 'data', id: hoveredStateId});
+            }
+        });
+
+        {% endblock linestring_popup %}
+
+        // Fly to on click
+        map.on('click', 'linestring', function(e) {
+            map.flyTo({
+                center: e.lngLat
+            });
+        });
+
+    });
+
+{% endblock map %}

@@ -1,0 +1,14 @@
+jinja2
+geojson
+chroma-py
+colour
+matplotlib
+
+[test]
+pytest>=3.6
+pytest-cov
+codecov
+mock
+jupyter
+Sphinx
+pandas
