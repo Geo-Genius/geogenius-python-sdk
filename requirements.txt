@@ -11,8 +11,8 @@ colour==0.1.5
 ipython==7.7.0
 
 # only for conda
-gdal==2.4.1
-rasterio==1.0.24
+gdal
+rasterio
 
 # only for pip
 python_dateutil==2.8.0
@@ -26,7 +26,7 @@ rio-cogeo==1.1.0
 rio-tiler
 
 # common
-pyproj==1.9.6
+pyproj>=2.2.0
 affine==2.2.2
 setuptools==41.0.1
 cachetools==3.1.1
