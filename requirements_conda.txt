@@ -1,2 +1,2 @@
-gdal==2.4.1
-rasterio==1.0.24
+gdal
+rasterio
