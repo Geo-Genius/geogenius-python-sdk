@@ -11,8 +11,8 @@ colour==0.1.5
 ipython==7.7.0
 
 # only for conda
-gdal
-rasterio
+gdal==3.0.4
+rasterio==1.1.4
 
 # only for pip
 python_dateutil==2.8.0
