@@ -2,7 +2,7 @@ torch
 torchvision
 scipy
 mxnet-cu90==1.2.0
-tensorflow-gpu==1.14.0
+tensorflow-gpu==1.15.4
 opencv-python
 Pillow==6.1.0
 Keras==2.2.4
