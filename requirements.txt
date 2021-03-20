@@ -4,7 +4,7 @@ jupyterlab<=0.35.3
 jupyter==1.0.0
 pandas==0.25.0
 mock==3.0.5
-Jinja2==2.10.1
+Jinja2==2.11.3
 geojson==2.4.1
 chroma-py==0.1.0.dev1
 colour==0.1.5
