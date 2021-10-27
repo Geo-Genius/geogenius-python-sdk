@@ -32,7 +32,7 @@ setuptools==41.0.1
 cachetools==3.1.1
 numpy==1.16
 toolz==0.10.0
-dask==1.1.1
+dask==2021.10.0
 matplotlib==3.1.0
 requests==2.22.0
 pytest==5.0.1
