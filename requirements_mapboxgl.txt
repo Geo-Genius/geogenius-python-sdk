@@ -12,4 +12,4 @@ geojson==2.4.1
 chroma-py==0.1.0.dev1
 colour==0.1.5
 requests==2.22.0
-ipython==7.7.0
+ipython==7.16.3
