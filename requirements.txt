@@ -8,7 +8,7 @@ Jinja2==2.10.1
 geojson==2.4.1
 chroma-py==0.1.0.dev1
 colour==0.1.5
-ipython==7.7.0
+ipython==7.16.3
 
 # only for conda
 gdal==3.0.4
