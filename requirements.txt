@@ -28,7 +28,7 @@ rio-tiler
 # common
 pyproj>=2.2.0
 affine==2.2.2
-setuptools==41.0.1
+setuptools==65.5.1
 cachetools==3.1.1
 numpy==1.16
 toolz==0.10.0
